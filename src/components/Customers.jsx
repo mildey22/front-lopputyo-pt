@@ -3,6 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import Button from '@mui/material/Button';
 import { fetchCustomers } from "../customerapi";
 import AddCustomer from "./AddCustomer";
+import EditCustomer from "./EditCustomer"
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
@@ -19,10 +20,14 @@ function Customers() {
         { field: 'lastname', filter: true, headerName: "Last name" },
         { field: 'firstname', filter: true, headerName: "First name" },
         { field: 'streetaddress', filter: true, headerName: "Street Address" },
-        { field: 'postcode', filter: true, headerName: "Post code" },
-        { field: 'city', filter: true },
+        { field: 'postcode', filter: true, headerName: "Post code", width: 120 },
+        { field: 'city', filter: true, width: 120 },
         { field: 'email', filter: true },
-        { field: 'phone', filter: true, headerName: "Phone number" },
+        { field: 'phone', filter: true, headerName: "Phone number", width: 150 },
+        {
+            cellRenderer: params => <EditCustomer data={params.data} updateCustomer={updateCustomer}/>,
+                width: 120
+        },
         {
             cellRenderer: params =>
                 <Button size="small" color="error" onClick={() => handleDelete(params.data._links.customer.href)}>
@@ -67,6 +72,23 @@ function Customers() {
                 .catch(err => console.error(err))
         }
     }
+
+    const updateCustomer = (url, updatedCustomer) => {
+        fetch(url, {
+            method: 'PUT',
+            headers: { 'content-type' : 'application/json'},
+            body: JSON.stringify(updatedCustomer)
+        })
+        .then(response => {
+            if (!response.ok)
+                throw new Error("Error in updating customer: " + response.statusText)
+
+            return response.json();
+        })
+        .then(() => handleFetch())
+            .catch(err => console.error(err))
+    }
+
 
     return (
         <>
