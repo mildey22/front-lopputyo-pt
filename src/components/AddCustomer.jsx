@@ -6,13 +6,16 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function AddTraining({ handleAdd }) {
+export default function AddCustomer({ handleAdd }) {
     const [open, setOpen] = useState(false);
-    const [training, setTraining] = useState({
-        date: '',
-        activity: '',
-        duration: '',
-        customer: ''
+    const [customer, setCustomer] = useState({
+        firstname: '',
+        lastname: '',
+        email: '',
+        phone: '',
+        streetaddress: '',
+        postcode: '',
+        city: ''
     })
     const handleClickOpen = () => {
         setOpen(true);
@@ -23,66 +26,74 @@ export default function AddTraining({ handleAdd }) {
     };
 
     const handleSave = () => {
-        handleAdd(training);
+        handleAdd(customer);
         setOpen(false);
     }
 
     return (
         <>
             <Button variant="outlined" onClick={handleClickOpen}>
-                Add training
+                Add customer
             </Button>
             <Dialog
                 open={open}
                 onClose={handleClose}
             >
-                <DialogTitle>New training</DialogTitle>
+                <DialogTitle>New customer</DialogTitle>
                 <DialogContent>
                     <TextField
                         margin="dense"
-                        label="Brand"
-                        value={training.date}
-                        onChange={e => setTraining({...training, date: e.target.value})}
+                        label="First name"
+                        value={customer.firstname}
+                        onChange={e => setCustomer({...customer, firstname: e.target.value})}
                         fullWidth
                         variant="standard"
                     />
                     <TextField
                         margin="dense"
-                        label="Model"
-                        value={car.model}
-                        onChange={e => setCar({...car, model: e.target.value})}
+                        label="Last name"
+                        value={customer.lastname}
+                        onChange={e => setCustomer({...customer, lastname: e.target.value})}
                         fullWidth
                         variant="standard"
                     />
                     <TextField
                         margin="dense"
-                        label="Color"
-                        value={car.color}
-                        onChange={e => setCar({...car, color: e.target.value})}
+                        label="Email"
+                        value={customer.email}
+                        onChange={e => setCustomer({...customer, email: e.target.value})}
                         fullWidth
                         variant="standard"
                     />
                     <TextField
                         margin="dense"
-                        label="Fuel"
-                        value={car.fuel}
-                        onChange={e => setCar({...car, fuel: e.target.value})}
+                        label="Phone number"
+                        value={customer.phone}
+                        onChange={e => setCustomer({...customer, phone: e.target.value})}
                         fullWidth
                         variant="standard"
                     />
                     <TextField
                         margin="dense"
-                        label="Model Year"
-                        value={car.modelYear}
-                        onChange={e => setCar({...car, modelYear: e.target.value})}
+                        label="Street address"
+                        value={customer.streetaddress}
+                        onChange={e => setCustomer({...customer, streetaddress: e.target.value})}
                         fullWidth
                         variant="standard"
                     />
                     <TextField
                         margin="dense"
-                        label="Price (€)"
-                        value={car.price}
-                        onChange={e => setCar({...car, price: e.target.value})}
+                        label="Postcode"
+                        value={customer.postcode}
+                        onChange={e => setCustomer({...customer, postcode: e.target.value})}
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        margin="dense"
+                        label="City"
+                        value={customer.city}
+                        onChange={e => setCustomer({...customer, city: e.target.value})}
                         fullWidth
                         variant="standard"
                     />

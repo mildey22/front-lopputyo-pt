@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { AgGridReact } from 'ag-grid-react';
-//import Button from '@mui/material/Button';
+import Button from '@mui/material/Button';
 import { fetchCustomers } from "../customerapi";
-//import AddTraining from "./AddTraining";
-//import EditTraining from "./EditTraining";
+import AddCustomer from "./AddCustomer";
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
@@ -24,7 +23,12 @@ function Customers() {
         { field: 'city', filter: true },
         { field: 'email', filter: true },
         { field: 'phone', filter: true, headerName: "Phone number" },
-
+        {
+            cellRenderer: params =>
+                <Button size="small" color="error" onClick={() => handleDelete(params.data._links.customer.href)}>
+                    Delete
+                </Button>, width: 120
+        }
     ]);
 
     const handleFetch = () => {
@@ -33,8 +37,40 @@ function Customers() {
             .catch(err => console.error(err))
     }
 
+    const handleAdd = (newCustomer) => {
+        fetch(import.meta.env.VITE_API_CUSTOMERS, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(newCustomer)
+        })
+            .then(response => {
+                if (!response.ok)
+                    throw new Error("Error in adding a customer: " + response.statusText)
+
+                return response.json();
+            })
+            .then(() => handleFetch())
+            .catch(err => console.error(err))
+    }
+
+    //Page has to be reloaded after deleting a customer, not sure why
+    const handleDelete = (url) => {
+        if (window.confirm("Are you sure? Deleting a customer deletes all trainings assigned to that customer!")) {
+            fetch(url, { method: 'DELETE' })
+                .then(response => {
+                    if (!response.ok)
+                        throw new Error("Error in deleting customer: " + response.statustext);
+
+                    return response.json();
+                })
+                .then(() => setCustomers())
+                .catch(err => console.error(err))
+        }
+    }
+
     return (
         <>
+            <AddCustomer handleAdd={handleAdd} />
             <div className="ag-theme-material" style={{ height: 600 }}>
                 <AgGridReact
                     rowData={customers}
